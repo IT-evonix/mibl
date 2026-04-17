@@ -1,0 +1,64 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # FORCE WWW REDIRECTION
+    RewriteCond %{HTTP_HOST} !^www\. [NC]
+    RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+
+    <IfModule mod_negotiation.c>
+        Options -Indexes
+    </IfModule>
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+
+    # Subdomain folder mapping
+    RewriteCond %{HTTP_HOST} ^(?:insurance\.mahindrafs\.com)?$
+    RewriteCond %{REQUEST_URI} !^/insurancemahindrafs/
+    RewriteRule ^(.*) insurancemahindrafs/$1 [NC,L,NS]
+
+    RewriteCond %{HTTP_HOST} ^(?:mbank\.mrhfl\.com)?$
+    RewriteCond %{REQUEST_URI} !^/mBankmrhfl/
+    RewriteRule ^(.*) mBankmrhfl/$1 [NC,L,NS]
+
+    RewriteCond %{HTTP_HOST} ^(?:quizcontest\.mahindrainsurance\.com)?$
+    RewriteCond %{REQUEST_URI} !^/quizcontest/
+    RewriteRule ^(.*) quizcontest/$1 [NC,L,NS]
+</IfModule>
+
+# Disable directory index view
+Options -Indexes
+
+# Hide specific files
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "composer.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<IfModule mod_headers.c>
+
+Header always set Cross-Origin-Opener-Policy "same-origin"
+Header always set Cross-Origin-Embedder-Policy "require-corp"
+Header always set Cross-Origin-Resource-Policy "same-origin"
+
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
