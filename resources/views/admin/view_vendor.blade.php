@@ -1,0 +1,152 @@
+@include('admin/header')
+@include('admin/side-menu') 
+
+  <div class="container-fluid col-lg-10 right_mainbox" id="viewlistmaster">
+
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="#">Master</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a href="#">Manage Field Type</a></li>
+<li class="breadcrumb-item active" aria-current="page">Manage Vendor</li>
+</ol>
+</nav>
+
+  <h4 class="viewdata"> Manage Vendor </h4>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-12">
+              
+
+                @if(Session::has('successmsg'))
+                <div class="alert alert-success alert-dismissible"  id="success_message" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" >
+                    </button>
+                  <h3 class="text-success"><i class="fa fa-check-circle"></i>Success</h3>
+                  {{Session::get('successmsg')}}
+                </div>
+                @endif
+
+                @if(Session::has('failmsg'))
+                <div class="alert alert-warning alert-dismissible"  id="waring_message" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" >
+                     </button>
+                  <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i>Error!</h3>
+                  {{Session::get('failmsg')}}
+                </div>
+                @endif
+              </div>
+              <div class="col-md-2 offset-10">
+                <a href="{{ENV('APP_URL')}}add-vendor"> <button type="button" class="btn btn-block btn-secondary">Add</button></a>
+
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <table id='empTable' class="table table-striped table-hover table-responsive" width="100%">
+              <thead>
+                <tr>
+               <th>Sr. No</th>
+               <th>Supplier Code</th>
+               <th>Name</th>
+               <th>Email ID</th>
+               <th>Tax Identification Code</th>
+               <th>GSTN NO </th>
+               <th>City</th>
+               <th>State</th>
+               <th>Vendor Type</th>
+               <th>Keyword</th>
+               <th>Postal Code</th>
+               <th>Status</th>
+               <th>Created Date</th>
+               <th class="sorting_disabled">Action</th>
+                </tr>
+              </thead>
+        
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+
+  @include('admin/footer')
+
+  
+    <!-- Script -->
+
+  <script>
+  $(document).ready(function () {
+  var element = document.getElementById("vendor");
+  element.classList.add("active");
+  document.getElementById("masters").style.display = "block";
+  document.getElementById("fields").style.display = "block";
+  var element1 = document.getElementById("menu");
+  element1.classList.add("open_meunbox");
+  });
+  </script>  
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+      // DataTable
+      $('#empTable').DataTable({
+        dom: 'lfBrtip',
+         processing: true,
+         serverSide: true,
+         "order": [[ 0, "desc" ]],
+         "aoColumnDefs" : [ {
+         "bSortable" : false,
+         "aTargets" : [ "sorting_disabled" ]
+          } ],
+         buttons: [
+            {
+                extend: 'collection',
+                text: 'Export',
+                buttons: [
+                    'copy',
+                    'excel',
+                    'csv',
+                    
+                ]
+            }
+        ],
+          
+        //  ajax: "{{route('vendor.getvendor')}}",
+        ajax: "{{ENV('APP_URL')}}vendor/getvendor",
+         "language": {
+            "infoFiltered":"",
+            "processing": "<img src='{{ENV('APP_URL')}}assets/images/loadingNew1.gif' style='width:13%' />"
+        },
+          
+         columns: [
+            { data: 'id' },
+            { data: 'vendor_code'},
+            { data: 'name' },
+            { data: 'email' },
+            { data: 'tax_identification_code'},
+            { data: 'gstn'},
+            { data: 'city'},
+            { data: 'state'},
+            { data: 'vendor_type_id'},
+            { data: 'keyword'},
+            { data: 'postal_code'},
+            { data: 'active_yn' },
+            { data: 'created_date' },
+            { data: 'action' },
+         ]
+      });
+
+    });
+    </script>
+  </body>
+</html>

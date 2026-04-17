@@ -1,0 +1,291 @@
+@include('admin/header')
+@include('admin/side-menu') 
+
+<?php
+$user_type=session('login_type');
+?>
+  <div class="container-fluid col-lg-10 right_mainbox" id="viewlistmaster">
+
+
+
+        <div class="card">
+        <div class="card-header" role="tab" id="headingOne">
+        <h4 class="viewdata">
+        Search Creative
+        </h4>
+        </div>
+
+        <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+        <div class="card-body">
+        {{ csrf_field() }}
+        <div class="form-row">
+        <div class="col-lg-4">
+        <label for="advertisement_id"><b>Advertisement Id :</b></label>
+        <input type="text" class="form-control" placeholder="Advertisement Id" id="advertisement_id" name="advertisement_id">
+        </div>
+        <div class="col-lg-4">
+        <label for="archive_category_id"><b>Archive Category :</b></label>
+        <select class="form-control" placeholder="Archive Category" id="archive_category_id" name="archive_category_id">
+          <option value="">--Select--</option>
+          <?php
+          for($i=0;$i<count($archive_c); $i++)
+          { $sub_ca=$archive_c[$i]['sub_list'];
+          ?>
+          <optgroup label="{{$archive_c[$i]['archive_category']}}">
+          <?php for($j=0;$j<count($sub_ca); $j++){ ?>
+          <option value="{{$archive_c[$i]['archive_category_id']}},{{$sub_ca[$j]['sub_category_id']}}">{{$sub_ca[$j]['sub_category']}}</option>
+
+          <?php } ?> 
+          </optgroup>
+          <?php } ?>
+        </select>
+        </div>
+        <div class="col-lg-4">
+        <label for="vendor_id"><b>Vendor Name :</b></label>
+        <select class="form-control"  id="vendor_id" name="vendor_id">
+          <option value="">--Select--</option>
+          <?php
+          for($i=0;$i<count($vendor_c); $i++)
+          { 
+          $sub_vendor=$vendor_c[$i]['vendor_list'];
+          ?>
+          <optgroup label="{{$vendor_c[$i]['vendor_type_name']}}">
+          <?php for($j=0;$j<count($sub_vendor); $j++){ ?>
+          <option value="{{$vendor_c[$i]['vendor_type_id']}},{{$sub_vendor[$j]['vendor_id']}}">{{$sub_vendor[$j]['vendor_name']}}</option>
+          <?php } ?> 
+          </optgroup>
+          <?php } ?>
+        </select>
+        </div>
+        </div>
+        <br>
+        <div class="form-row">
+        <div class="col-lg-4">
+        <label for="department_id"><b>Department :</b></label>
+        <select class="form-control"  id="department_id" name="department_id">
+          <option value="">--Select--</option>
+          <?php
+          for($i=0;$i<count($department_c); $i++)
+          { 
+          $sub_depart=$department_c[$i]['department_list'];
+          ?>
+          <optgroup label="{{$department_c[$i]['department_type_name']}}">
+          <?php for($j=0;$j<count($sub_depart); $j++){ ?>
+          <option value="{{$department_c[$i]['department_type_id']}},{{$sub_depart[$j]['department_id']}}">{{$sub_depart[$j]['department_name']}}</option>
+          <?php } ?> 
+          </optgroup>
+          <?php } ?>
+        </select>
+        </div>
+        <div class="col-lg-4">
+        <label for="document_type_id"><b>Campaign From :</b></label>
+       <input type="text" placeholder="Campaign From" class="form-control datepicker btnFiterSubmitSearchpage"  id="from_date" name="from_date" >
+       <label  class="fa fa-calendar input-icon"></label>
+      </div>
+      <div class="col-lg-4">
+        <label for="document_type_id"><b>Campaign To:</b></label>
+       <input type="text" placeholder="Campaign To" class="form-control datepicker btnFiterSubmitSearchpage"  id="to_date" name="to_date" >
+       <label  class="fa fa-calendar input-icon"></label>
+      </div>
+       </div>
+        <button class="btn btn-success search-form1-btn" type="text" id="btnFiterSubmitSearch">Search</button>
+        <a class="btn btn-danger search-form1-btn" href="{{ENV('APP_URL')}}view-creative-vendor-approve" role="button">Cancel</a>
+        </div>
+        </div>
+        </div>
+
+<br><br>
+ 
+  
+  
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-12">
+                @if(Session::has('successmsg'))
+                <div class="alert alert-success alert-dismissible"  id="success_message" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" >
+                    </button>
+                  <h3 class="text-success"><i class="fa fa-check-circle"></i>Success</h3>
+                  {{Session::get('successmsg')}}
+                </div>
+                @endif
+
+                @if(Session::has('failmsg'))
+                <div class="alert alert-warning alert-dismissible"  id="waring_message" role="alert">
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" >
+                     </button>
+                  <h3 class="text-warning"><i class="fa fa-exclamation-triangle"></i>Error!</h3>
+                  {{Session::get('failmsg')}}
+                </div>
+                @endif
+              </div>
+              <div class="col-lg-12">
+                <!-- <a href="{{ENV('APP_URL')}}add_user"> <button type="button" class="btn btn-block btn-secondary">Add</button></a> -->
+                <h4 class="viewdata"> Approve Creatives </h4>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <table id='empTable' class="table table-striped table-hover table-responsive" width="100%">
+              <thead>
+                <tr>
+                <th>Sr. No</th>
+               <th>Creative File </th>
+               <th>Advertisement ID</th>
+               <th>File Name</th>
+               <th>Archive Category</th>
+               <!-- <th>Brand</th> -->
+               <th>Vendor</th>
+               <th>Department</th>
+               <!-- <th>Document_type</th> -->
+               <th>Campaign Month/Year</th>
+               <th>Status</th>
+               <th>Date Of Upload</th>
+               <th>Source File </th>
+               <th class="sorting_disabled">Action</th>
+                </tr>
+              </thead>
+        
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+
+  @include('admin/footer')
+
+  
+    <!-- Script -->
+  
+  
+  <script>
+  $(document).ready(function () {
+  var element = document.getElementById("manage_creative_approve");
+  element.classList.add("active");
+  });
+  </script>  
+  
+  <script>
+   // Add active class to the current button (highlight it)
+   var header = document.getElementById("myDIV");
+   var btns = header.getElementsByClassName("btn");
+   for (var i = 0; i < btns.length; i++) {
+   btns[i].addEventListener("click", function () {
+   var current = document.getElementsByClassName("active");
+   current[0].className = current[0].className.replace(" active", "");
+   this.className += " active";
+   });
+   }
+</script>
+
+      <script type="text/javascript">
+      var _token = jQuery('input[name="_token"]').val();
+      $(document).ready(function(){
+
+      $.ajaxSetup({
+      headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+      });
+      $.noConflict(); 
+
+      // DataTable
+      $('#empTable').DataTable({
+      dom: 'lfBrtip', 
+      processing: true,
+      serverSide: true,
+      "order": [[ 0, "desc" ]],
+      "aoColumnDefs" : [ {
+      "bSortable" : false,
+      "aTargets" : [ "sorting_disabled" ]
+      } ],
+
+      buttons: [
+      {
+      extend: 'collection',
+      text: 'Export',
+      buttons: [
+      'copy',
+      'excel',
+      'csv',
+
+      ]
+      }
+      ],
+      //ajax: "{{route('creatives.getcreatives')}}",
+      ajax: {
+      // url: "{{ route('creative_vendor_approve.getcreatives_vendor_approve') }}",
+      url: "{{ENV('APP_URL')}}creative_vendor_approve/getcreatives_vendor_approve",
+      type: 'GET',
+      data: function (d) {
+      d.vendor_id = $('#vendor_id').val();
+      d.advertisement_id = $('#advertisement_id').val();
+      d.archive_category_id = $('#archive_category_id').val();
+      d.department_id = $('#department_id').val();
+      d.from_date = $('#from_date').val();
+      d.to_date = $('#to_date').val();
+      }
+      },
+
+      "language": {
+      "infoFiltered":"",
+      "processing": "<img src='{{ENV('APP_URL')}}assets/images/loadingNew1.gif' style='width:13%' />"
+      },
+
+      columns: [
+      { data: 'id' },
+      { data: 'photo_url' },
+      { data: 'advertisement_id' },
+      { data: 'file_name'},
+      { data: 'archive_category_id'},
+      // { data: 'brand_id'},
+      { data: 'vendor_id'},
+      { data: 'department_id'},
+      // { data: 'document_type_id'},
+      { data: 'date_of_posting'},
+      { data: 'active_yn' },
+      { data: 'created_date' },
+      { data: 'source_file' },
+      { data: 'action' },
+      ]
+      });
+
+      });
+
+
+      $('#btnFiterSubmitSearch').click(function(){
+      $('#empTable').DataTable().draw(true);
+      }); 
+      </script>
+
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.js"  ></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/base/jquery-ui.css">-->
+
+<script type="text/javascript"> 
+$(function() {
+$('.datepicker').datepicker( {
+changeMonth: true,
+changeYear: true,
+showButtonPanel: true,
+dateFormat: 'MM yy',
+onSelect: function(dateText, inst) { 
+    $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+}
+});
+});
+</script>
+  </body>
+</html>

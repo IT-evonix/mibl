@@ -1,0 +1,171 @@
+@include('admin/header')
+@include('admin/side-menu')
+
+
+            <!-- main content -->
+            <div class="col-lg-5">
+
+            <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Master</a></li>
+            <li class="breadcrumb-item"><a href="{{ENV('APP_URL')}}view-user-type">Manage User Type</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit User Type Role Permissions </li>
+            </ol>
+            </nav>
+            <h4 class="addeditdata"> Edit User Type Role Permissions </h4>
+                <!-- START FORM -->
+                <div class="sign-in-up-form mt-5">
+                    <div class="tab-content">
+                        <div id="login">
+                            <div class="wrapper">
+                                <div class="container">
+                                @foreach($edit_services as $user_type)
+                                    <form method="POST" action="{{ url('/update_user_type_access') }}">
+                                    {{ csrf_field() }}
+                                    <div class="card">
+                                    <div class="card-body">
+                                    <b>User Type Name : </b>{{$data_type->user_type_name}}
+                                    </div>
+                                    </div>
+                                    <br>
+                                    <table class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                       <th>Role Type</th>
+                                       <th><center>Permissions</center></th> 
+                                    </tr>
+                                    </thead>
+                                    <tbody>    
+                                    <tr>
+                                    <td><b>Search ad</b></td>    
+                                    <td width="50%"><center><input onclick="enable_cb()" type="checkbox" id="check1" name="search_ad" class="from-control checkboxid" <?php if($user_type->search_ad == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Advance Search</b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check2" name="advance_search" class="from-control checkboxid" <?php if($user_type->advance_search == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Download Creative</b></td>    
+                                    <td width="50%"><center><input disabled="disabled" type="checkbox" id="check3" name="download_creative" class="from-control checkboxid group1" <?php if($user_type->download_creative == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Single File upload</b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check4" name="single_file_upload" class="from-control checkboxid" <?php if($user_type->single_file_upload == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Bulk Upload Files</b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check5" name="bulk_upload_files" class="from-control checkboxid" <?php if($user_type->bulk_upload_files == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Agreement</b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check6" class="from-control checkboxid" name="agreement" <?php if($user_type->agreement == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Approve Creatives</b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check7" class="from-control checkboxid" name="approve_creatives" <?php if($user_type->approve_creatives == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b>Advertisement Id List</b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check8" class="from-control checkboxid" name="advertisement_id_list" <?php if($user_type->advertisement_id_list == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b> Manage Newsletter </b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check9" class="from-control checkboxid" name="manage_newsletter" <?php if($user_type->manage_newsletter == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <tr>
+                                    <td><b> Upload Newsletter </b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check10" class="from-control checkboxid" name="upload_newsletter" <?php if($user_type->upload_newsletter == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    <!--<tr>
+                                    <td><b> Notification </b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check11" class="from-control checkboxid" name="notification" <?php if($user_type->notification == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>-->
+
+                                    <tr>
+                                    <td><b> Manage Report </b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check12" class="from-control checkboxid" name="manage_report" <?php if($user_type->manage_report == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <td><b> Manage Miscellaneous </b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check12" class="from-control checkboxid" name="manage_miscellaneous" <?php if($user_type->manage_miscellaneous == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                     <tr>
+                                    <td><b> Manage Adaptation </b></td>    
+                                    <td width="50%"><center><input type="checkbox" id="check12" class="from-control checkboxid" name="manage_adaptation" <?php if($user_type->manage_adaptation == 'yes'){ echo "checked";}else{ echo '';}?>></center></td>
+                                    </tr>
+                                    
+                                   </tbody>
+                                    </table>
+                                    <input type="hidden"  name="user_type_id" id="user_type_id"  value="{{$user_type->user_type_id}}">    
+                                    <input type="hidden"  name="id" id="id"  value="{{$user_type->id}}">
+                                    <button class="btn upload-btn" type="submit">Update</button>
+                                    </form>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END FORM -->
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- End tab -->
+            @include('admin/footer')
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
+<!-- tab script -->
+
+
+<script>
+$(document).ready(function () {
+  var element = document.getElementById("user_type");
+  element.classList.add("active");
+  document.getElementById("masters").style.display = "block";
+  var element1 = document.getElementById("menu");
+  element1.classList.add("open_meunbox");
+enable_cb();
+});
+
+function enable_cb() {
+var checkBox = document.getElementById("check1");
+  if (checkBox.checked == true) {
+    $("input.group1").removeAttr("disabled");
+  } else {
+    $("input.group1").attr("disabled", true);
+  }
+}
+</script>
+
+
+
+
+<!-- form script -->
+<script>
+function checkValue(element) {
+// check if the input has any value (if we've typed into it)
+if ($(element).val())
+$(element).addClass('has-value');
+else
+$(element).removeClass('has-value');
+}
+
+$(document).ready(function () {
+// Run on page load
+$('.form-control').each(function () {
+checkValue(this);
+})
+// Run on input exit
+$('.form-control').blur(function () {
+checkValue(this);
+});
+
+});
+</script>
+</body>
+
+
+
+
+</html>
